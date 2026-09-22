@@ -1,11 +1,14 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import Chip from '../components/Chip.jsx'
 import ErrorMessage from '../components/ErrorMessage.jsx'
 import SectionHeading from '../components/SectionHeading.jsx'
 import Spinner from '../components/Spinner.jsx'
 import AnimeGrid from '../features/AnimeGrid.jsx'
+import SearchBar from '../features/SearchBar.jsx'
+import useDebounce from '../hooks/useDebounce.js'
 import useFetch from '../hooks/useFetch.js'
-import { getTopAnime } from '../services/jikan.js'
+import { getTopAnime, searchAnime } from '../services/jikan.js'
 
 const FILTERS = [
   { value: '', label: 'Melhor nota' },
@@ -15,7 +18,26 @@ const FILTERS = [
 
 function ExplorePage() {
   const [filter, setFilter] = useState('')
-  const { data, loading, error } = useFetch(() => getTopAnime(filter), [filter])
+  const [params, setParams] = useSearchParams()
+  const values = {
+    q: params.get('q') ?? '',
+    type: params.get('type') ?? '',
+    genre: params.get('genre') ?? '',
+  }
+  const onChange = (next) => {
+    const entries = Object.entries(next).filter(([, v]) => v)
+    setParams(Object.fromEntries(entries), { replace: true })
+  }
+
+  const debouncedQ = useDebounce(values.q)
+  const q = debouncedQ.length >= 3 ? debouncedQ : ''
+  const { type, genre } = values
+  const searching = Boolean(q || type || genre)
+
+  const { data, loading, error } = useFetch(
+    () => (searching ? searchAnime({ q, type, genre }) : getTopAnime(filter)),
+    [searching, q, type, genre, filter],
+  )
 
   return (
     <div className="flex flex-col gap-6">
@@ -24,15 +46,18 @@ function ExplorePage() {
         title="Explorar"
         subtitle="Busque no catálogo do MyAnimeList e monte sua lista."
       />
+      <SearchBar values={values} onChange={onChange} />
       <div className="flex items-center justify-between">
-        <h3 className="font-display text-xl uppercase">Top animes</h3>
-        <div className="flex gap-2">
-          {FILTERS.map(({ value, label }) => (
-            <Chip key={value} active={filter === value} onClick={() => setFilter(value)}>
-              {label}
-            </Chip>
-          ))}
-        </div>
+        <h3 className="font-display text-xl uppercase">{searching ? 'Resultados' : 'Top animes'}</h3>
+        {!searching && (
+          <div className="flex gap-2">
+            {FILTERS.map(({ value, label }) => (
+              <Chip key={value} active={filter === value} onClick={() => setFilter(value)}>
+                {label}
+              </Chip>
+            ))}
+          </div>
+        )}
       </div>
       {loading && <Spinner />}
       {error && <ErrorMessage message={error.message} />}
