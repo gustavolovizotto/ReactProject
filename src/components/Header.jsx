@@ -1,6 +1,7 @@
 import Logo from './Logo.jsx'
 import NavTabs from './NavTabs.jsx'
 import ListCounter from './ListCounter.jsx'
+import { useList } from '../state/ListContext.jsx'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Explorar' },
@@ -10,11 +11,13 @@ const NAV_ITEMS = [
 ]
 
 function Header() {
+  const { items } = useList()
+
   return (
     <header className="h-[84px] px-12 flex items-center justify-between border-b-2 border-ink">
       <Logo />
       <NavTabs items={NAV_ITEMS} />
-      <ListCounter count={0} />
+      <ListCounter count={items.length} />
     </header>
   )
 }
