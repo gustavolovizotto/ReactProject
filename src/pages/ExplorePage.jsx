@@ -9,6 +9,7 @@ import SearchBar from '../features/SearchBar.jsx'
 import useDebounce from '../hooks/useDebounce.js'
 import useFetch from '../hooks/useFetch.js'
 import { getTopAnime, searchAnime } from '../services/jikan.js'
+import { useList } from '../state/ListContext.jsx'
 
 const FILTERS = [
   { value: '', label: 'Melhor nota' },
@@ -18,6 +19,7 @@ const FILTERS = [
 
 function ExplorePage() {
   const [filter, setFilter] = useState('')
+  const { add, has } = useList()
   const [params, setParams] = useSearchParams()
   const values = {
     q: params.get('q') ?? '',
@@ -61,7 +63,7 @@ function ExplorePage() {
       </div>
       {loading && <Spinner />}
       {error && <ErrorMessage message={error.message} />}
-      {data && <AnimeGrid animes={data.items} />}
+      {data && <AnimeGrid animes={data.items} onAdd={(anime) => add(anime)} isAdded={has} />}
     </div>
   )
 }
