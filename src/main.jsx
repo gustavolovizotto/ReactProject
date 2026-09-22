@@ -20,7 +20,7 @@ const router = createBrowserRouter([
       { path: 'estatisticas', element: <StatsPage /> },
     ],
   },
-])
+], { basename: import.meta.env.BASE_URL })
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

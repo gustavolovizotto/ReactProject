@@ -33,18 +33,20 @@ function MyListPage() {
       ) : (
         <>
           <StatusTabs value={tab} onChange={setTab} counts={counts} />
-          <div className="flex flex-col gap-3">
-            <ListHeaderRow />
-            {visible.map((item) => (
-              <ListRow
-                key={item.anime.id}
-                item={item}
-                onStatusChange={(id, status) => update(id, { status })}
-                onRemove={remove}
-                onOpen={setSelectedId}
-              />
-            ))}
-            {visible.length === 0 && <p className="text-muted">Nenhum anime nesta aba.</p>}
+          <div className="overflow-x-auto">
+            <div className="flex flex-col gap-3 min-w-[880px]">
+              <ListHeaderRow />
+              {visible.map((item) => (
+                <ListRow
+                  key={item.anime.id}
+                  item={item}
+                  onStatusChange={(id, status) => update(id, { status })}
+                  onRemove={remove}
+                  onOpen={setSelectedId}
+                />
+              ))}
+              {visible.length === 0 && <p className="text-muted">Nenhum anime nesta aba.</p>}
+            </div>
           </div>
         </>
       )}

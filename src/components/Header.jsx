@@ -14,7 +14,7 @@ function Header() {
   const { items } = useList()
 
   return (
-    <header className="h-[84px] px-12 flex items-center justify-between border-b-2 border-ink">
+    <header className="h-[84px] px-4 md:px-12 flex items-center justify-between border-b-2 border-ink">
       <Logo />
       <NavTabs items={NAV_ITEMS} />
       <ListCounter count={items.length} />
