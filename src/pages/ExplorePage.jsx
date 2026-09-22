@@ -4,6 +4,7 @@ import Chip from '../components/Chip.jsx'
 import ErrorMessage from '../components/ErrorMessage.jsx'
 import SectionHeading from '../components/SectionHeading.jsx'
 import Spinner from '../components/Spinner.jsx'
+import AnimeDetailModal from '../features/AnimeDetailModal.jsx'
 import AnimeGrid from '../features/AnimeGrid.jsx'
 import SearchBar from '../features/SearchBar.jsx'
 import useDebounce from '../hooks/useDebounce.js'
@@ -19,6 +20,7 @@ const FILTERS = [
 
 function ExplorePage() {
   const [filter, setFilter] = useState('')
+  const [selectedId, setSelectedId] = useState(null)
   const { add, has } = useList()
   const [params, setParams] = useSearchParams()
   const values = {
@@ -63,7 +65,10 @@ function ExplorePage() {
       </div>
       {loading && <Spinner />}
       {error && <ErrorMessage message={error.message} />}
-      {data && <AnimeGrid animes={data.items} onAdd={(anime) => add(anime)} isAdded={has} />}
+      {data && (
+        <AnimeGrid animes={data.items} onAdd={(anime) => add(anime)} onOpen={setSelectedId} isAdded={has} />
+      )}
+      <AnimeDetailModal id={selectedId} onClose={() => setSelectedId(null)} onOpen={setSelectedId} />
     </div>
   )
 }
