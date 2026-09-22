@@ -1,5 +1,7 @@
 import Chip from '../components/Chip.jsx'
 import Cover from '../components/Cover.jsx'
+import { useList } from '../state/ListContext.jsx'
+import RatingForm from './RatingForm.jsx'
 
 const compact = new Intl.NumberFormat('pt-BR', { notation: 'compact' })
 
@@ -13,6 +15,7 @@ function Stat({ label, value }) {
 }
 
 function AnimeDetail({ anime, recommendations, onOpen }) {
+  const { get } = useList()
   const meta = [anime.type, anime.year, anime.episodes != null && `${anime.episodes} episódios`, anime.studios.join(', ')]
     .filter(Boolean)
     .join(' · ')
@@ -52,6 +55,7 @@ function AnimeDetail({ anime, recommendations, onOpen }) {
           )}
         </div>
       </div>
+      <RatingForm key={anime.id} anime={anime} initial={get(anime.id)} />
       {recommendations.length > 0 && (
         <section className="flex flex-col gap-4">
           <h3 className="font-display text-xl uppercase">Quem gostou também viu</h3>
