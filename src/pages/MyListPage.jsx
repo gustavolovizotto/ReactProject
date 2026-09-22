@@ -1,14 +1,11 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import EmptyState from '../components/EmptyState.jsx'
 import SectionHeading from '../components/SectionHeading.jsx'
 import AnimeDetailModal from '../features/AnimeDetailModal.jsx'
 import ListHeaderRow from '../features/ListHeaderRow.jsx'
 import ListRow from '../features/ListRow.jsx'
 import StatusTabs from '../features/StatusTabs.jsx'
 import { STATUS, useList } from '../state/ListContext.jsx'
-
-const BUTTON_CLASS =
-  'inline-flex items-center h-11 px-5 rounded border-2 border-ink font-semibold shadow-[4px_4px_0_#1c1a17] bg-vermilion text-white'
 
 function MyListPage() {
   const { items, update, remove } = useList()
@@ -32,12 +29,7 @@ function MyListPage() {
         subtitle={`Salva neste navegador. ${items.length} animes.`}
       />
       {items.length === 0 ? (
-        <div className="flex flex-col items-start gap-4 rounded-lg border-2 border-ink bg-paper p-8">
-          <p className="text-muted">Sua lista está vazia.</p>
-          <Link to="/" className={BUTTON_CLASS}>
-            Ir explorar
-          </Link>
-        </div>
+        <EmptyState message="Sua lista está vazia." cta="Ir explorar" to="/" />
       ) : (
         <>
           <StatusTabs value={tab} onChange={setTab} counts={counts} />
