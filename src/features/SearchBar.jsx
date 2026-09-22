@@ -6,7 +6,7 @@ function SearchBar({ values, onChange }) {
   const set = (field) => (e) => onChange({ ...values, [field]: e.target.value })
 
   return (
-    <form onSubmit={(e) => e.preventDefault()} className="flex items-end gap-3">
+    <form onSubmit={(e) => e.preventDefault()} className="flex flex-wrap items-end gap-3">
       <Field label="Buscar" id="search-q">
         <input
           id="search-q"
@@ -14,7 +14,7 @@ function SearchBar({ values, onChange }) {
           placeholder="Nome do anime"
           value={values.q}
           onChange={set('q')}
-          className={`${inputClass} w-[560px]`}
+          className={`${inputClass} md:w-[560px]`}
         />
       </Field>
       <Field label="Tipo" id="search-type">

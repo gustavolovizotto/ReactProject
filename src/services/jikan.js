@@ -1,7 +1,13 @@
 const BASE = 'https://api.jikan.moe/v4'
 
-async function request(path) {
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+async function request(path, retry = true) {
   const res = await fetch(`${BASE}${path}`)
+  if (res.status === 429 && retry) {
+    await wait(1000)
+    return request(path, false)
+  }
   if (!res.ok) throw new Error(`Jikan ${res.status}`)
   return res.json()
 }
