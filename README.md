@@ -3,7 +3,7 @@
 SPA em React que consome a API pública [AniList](https://docs.anilist.co) (GraphQL) para explorar animes e montar uma lista pessoal com status, nota e estatísticas.
 Trabalho da disciplina Programação Web Fullstack.
 
-**Deploy:** https://gustavolovizotto.github.io/ReactProject/
+**Deploy:** [https://gustavolovizotto.github.io/ReactProject/](https://my-animes-pink.vercel.app/)
 
 ## Funcionalidades
 
