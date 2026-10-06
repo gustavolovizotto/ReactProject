@@ -71,9 +71,9 @@ function normalize(raw) {
 }
 
 const PAGE_QUERY = `
-  query ($perPage: Int, $search: String, $format: MediaFormat, $genre: [String],
+  query ($page: Int, $perPage: Int, $search: String, $format: MediaFormat, $genre: [String],
          $status: MediaStatus, $season: MediaSeason, $seasonYear: Int, $sort: [MediaSort]) {
-    Page(perPage: $perPage) {
+    Page(page: $page, perPage: $perPage) {
       media(type: ANIME, isAdult: false, search: $search, format: $format, genre_in: $genre,
             status: $status, season: $season, seasonYear: $seasonYear, sort: $sort) {
         ${MEDIA_FIELDS}
@@ -126,6 +126,18 @@ export async function getRecommendations(id) {
     .map((n) => n.mediaRecommendation)
     .filter(Boolean)
     .map((m) => ({ id: m.id, title: m.title.english ?? m.title.romaji, image: m.coverImage.large }))
+}
+
+let popularIndex = null
+
+// Dois lotes de 50 (máximo da AniList) guardados em memória para a busca por prefixo no cliente.
+export function getPopularIndex() {
+  popularIndex ??= Promise.all(
+    [1, 2].map((pageNumber) =>
+      request(PAGE_QUERY, { page: pageNumber, perPage: 50, sort: ['POPULARITY_DESC'] }),
+    ),
+  ).then((pages) => pages.flatMap((data) => data.Page.media.map(normalize)))
+  return popularIndex
 }
 
 const WEEKDAYS = ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays']
