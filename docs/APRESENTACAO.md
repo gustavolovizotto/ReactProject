@@ -25,4 +25,4 @@
 ## 4. Processo e entrega (1 min)
 
 - Mostrar o `git log`: um commit por task, mensagens em português no padrão `feat: ...`, PR por task.
-- Mostrar o README: requisitos apontados para os arquivos, deploy no GitHub Pages e a seção "Ferramentas de apoio" documentando o uso do Claude Code com revisão do autor.
+- Mostrar o README: requisitos apontados para os arquivos, deploy no GitHub Pages.

@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Claude Code
+# Arquivos locais
 .claude/
+ROADMAP.md

@@ -27,7 +27,6 @@ Trabalho da disciplina Programação Web Fullstack.
 | Biblioteca externa: Tailwind CSS v4 | [`src/index.css`](src/index.css) (tema) e classes em todos os componentes |
 | SPA sem redirecionamento | `createBrowserRouter` em [`src/main.jsx`](src/main.jsx), navegação com `NavLink`; fallback `404.html` no GitHub Pages |
 | Cadência de commits | Um commit por task, mensagens em português no padrão `feat: ...`, um PR por task |
-| Documentar IA | Seção "Ferramentas de apoio" abaixo |
 | Apresentação | Roteiro em [`docs/APRESENTACAO.md`](docs/APRESENTACAO.md) |
 
 ## Stack
@@ -62,13 +61,3 @@ Outros scripts: `npm run build` (produção), `npm run lint` (oxlint), `npm run 
 ## Divisão de responsabilidades
 
 Integrante único: **Gustavo Tesin**, responsável por planejamento, design, implementação, testes manuais, deploy e apresentação.
-
-## Ferramentas de apoio
-
-O [Claude Code](https://claude.com/claude-code) foi usado como ferramenta de apoio em três frentes:
-
-- **Planejamento**: quebra do trabalho em 13 tasks com critérios de aceite e mensagens de commit, registradas em [`ROADMAP.md`](ROADMAP.md).
-- **Design**: geração do protótipo visual (paleta, tipografia, identidade com bordas e sombras duras) que serviu de referência para os componentes.
-- **Código**: geração de componentes, hooks e serviços a partir das especificações de cada task.
-
-Todo o código gerado foi revisado, testado no navegador e ajustado pelo autor antes de ser incorporado ao projeto.
