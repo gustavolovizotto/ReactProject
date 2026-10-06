@@ -38,7 +38,7 @@ function AnimeDetail({ anime, recommendations, onOpen }) {
             </div>
           )}
           <div className="flex gap-10">
-            <Stat label="Nota MAL" value={anime.score ?? '–'} />
+            <Stat label="Nota AniList" value={anime.score ?? '–'} />
             <Stat label="Ranking" value={anime.rank ? `#${anime.rank}` : '–'} />
             <Stat label="Membros" value={anime.members ? compact.format(anime.members) : '–'} />
           </div>

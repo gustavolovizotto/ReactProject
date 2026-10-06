@@ -4,6 +4,7 @@ import { STATUS } from '../state/ListContext.jsx'
 const DEFAULT_MINUTES = 24
 
 function episodeMinutes(duration) {
+  if (typeof duration === 'number') return duration
   const match = /(\d+)\s*min/.exec(duration ?? '')
   return match ? Number(match[1]) : DEFAULT_MINUTES
 }

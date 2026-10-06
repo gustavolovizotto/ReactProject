@@ -39,7 +39,7 @@ function StatsPage() {
             />
             <StatTile label="Horas assistidas" value={stats.hours} sub={`${stats.episodesWatched} episódios`} />
             <StatTile label="Sua média" value={stats.myAverage ?? '–'} sub="nota média que você deu" />
-            <StatTile label="Você vs. MAL" value={formatDiff(stats.diff)} sub={diffSub(stats.diff)} />
+            <StatTile label="Você vs. AniList" value={formatDiff(stats.diff)} sub={diffSub(stats.diff)} />
           </div>
           <div className="grid grid-cols-2 gap-6">
             <section className={PANEL_CLASS}>

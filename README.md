@@ -1,6 +1,6 @@
 # AnimeTracker
 
-SPA em React que consome a API pública [Jikan](https://jikan.moe) (dados do MyAnimeList) para explorar animes e montar uma lista pessoal com status, nota e estatísticas.
+SPA em React que consome a API pública [AniList](https://docs.anilist.co) (GraphQL) para explorar animes e montar uma lista pessoal com status, nota e estatísticas.
 Trabalho da disciplina Programação Web Fullstack.
 
 **Deploy:** https://gustavolovizotto.github.io/ReactProject/
@@ -9,16 +9,16 @@ Trabalho da disciplina Programação Web Fullstack.
 
 - Top animes com ordenação (melhor nota, mais populares, em exibição)
 - Busca por texto, tipo e gênero, com debounce de 500 ms e estado na URL
-- Modal de detalhe com sinopse, números do MAL, trailer e recomendações navegáveis
+- Modal de detalhe com sinopse, números do AniList, trailer e recomendações navegáveis
 - Formulário de avaliação (status, nota, comentário) com validação
 - Lista pessoal persistida em localStorage, com abas por status e edição inline
-- Estatísticas: horas assistidas, média pessoal vs. MAL, gêneros favoritos, histograma de notas
+- Estatísticas: horas assistidas, média pessoal vs. AniList, gêneros favoritos, histograma de notas
 
 ## Requisitos do enunciado → onde está no código
 
 | Requisito | Onde está |
 |---|---|
-| API JSON aberta | Jikan v4 em [`src/services/jikan.js`](src/services/jikan.js) (`getTopAnime`, `searchAnime`, `getAnime`, `getRecommendations`), consumida via [`src/hooks/useFetch.js`](src/hooks/useFetch.js) |
+| API JSON aberta | AniList GraphQL em [`src/services/anilist.js`](src/services/anilist.js) (`getTopAnime`, `searchAnime`, `getAnime`, `getRecommendations`), consumida via [`src/hooks/useFetch.js`](src/hooks/useFetch.js) |
 | Hook obrigatório: `useReducer` | [`src/state/ListContext.jsx`](src/state/ListContext.jsx) (lista pessoal) |
 | Hook obrigatório: `useMemo` | [`src/hooks/useStats.js`](src/hooks/useStats.js) (estatísticas) |
 | Hook obrigatório: `createPortal` | [`src/components/Modal.jsx`](src/components/Modal.jsx) (modal de detalhe) |
@@ -36,7 +36,7 @@ Trabalho da disciplina Programação Web Fullstack.
 - Tailwind CSS v4 (`@tailwindcss/vite`)
 - React Router v6
 - react-hook-form + Yup (`@hookform/resolvers`)
-- API: Jikan v4 (`https://api.jikan.moe/v4`), sem chave, limite de 3 req/s
+- API: AniList GraphQL (`https://graphql.anilist.co`), sem chave, limite de 30 req/min
 
 ## Estrutura
 
@@ -46,7 +46,7 @@ src/
   features/     # componentes de domínio (AnimeCard, ListRow, RatingForm...)
   pages/        # uma por rota (Explorar, Minha lista, Estatísticas)
   hooks/        # useFetch, useDebounce, useStats
-  services/     # jikan.js
+  services/     # anilist.js
   state/        # ListContext.jsx (useReducer)
   lib/          # storage.js
 ```

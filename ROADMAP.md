@@ -1,6 +1,6 @@
 # Roadmap · AnimeTracker
 
-SPA em React que consome a API pública **Jikan** (dados do MyAnimeList) e permite montar uma lista pessoal de animes com status, nota e estatísticas. Trabalho da disciplina Programação Web Fullstack. Prazo: **sexta, 25/09/2026**.
+SPA em React que consome a API pública **AniList** (GraphQL; originalmente Jikan, migrada em 06/10/2026) e permite montar uma lista pessoal de animes com status, nota e estatísticas. Trabalho da disciplina Programação Web Fullstack. Prazo: **sexta, 25/09/2026**.
 
 Design aprovado: https://claude.ai/artifact/NMDwaEm3HtFbcEp5pzVbc3
 
@@ -8,7 +8,7 @@ Design aprovado: https://claude.ai/artifact/NMDwaEm3HtFbcEp5pzVbc3
 
 | Requisito | Atendido por |
 |---|---|
-| API JSON aberta | Jikan v4 (`https://api.jikan.moe/v4`), sem chave |
+| API JSON aberta | AniList GraphQL (`https://graphql.anilist.co`), sem chave |
 | Hook obrigatório (lista: useMemo, useReducer, react-redux, useRef, forwardRef, memo, lazy, createPortal) | `useReducer` na lista pessoal, `useMemo` nas estatísticas, `createPortal` no modal |
 | Biblioteca externa | React Router, react-hook-form + Yup, Tailwind CSS |
 | SPA sem redirecionamento | Rotas client-side com React Router |
@@ -28,7 +28,7 @@ Design aprovado: https://claude.ai/artifact/NMDwaEm3HtFbcEp5pzVbc3
     features/     # componentes de domínio (AnimeCard, ListRow, RatingForm...)
     pages/        # uma por rota
     hooks/        # useFetch, useList, useStats
-    services/     # jikan.js
+    services/     # anilist.js
     state/        # ListContext.jsx (useReducer)
     lib/          # utilidades puras (format.js, storage.js)
   ```
@@ -39,7 +39,7 @@ Design aprovado: https://claude.ai/artifact/NMDwaEm3HtFbcEp5pzVbc3
 - **Acessibilidade mínima**: botão é `<button>`, link é `<a>`/`<Link>`, input tem `<label>`, botão só com ícone tem `aria-label`.
 - **Fluxo git por task**: só começar a task N se o PR da task N-1 já estiver **mergeado** na `main` (conferir com `gh pr list --state merged`; se o anterior estiver aberto, parar e avisar). Então `git checkout main && git pull`, `git checkout -b task-NN-slug`, implementar, `npm run build` e `npm run lint` sem erro, funcionalidade conferida no navegador, **um commit** com a mensagem indicada, `git push -u origin task-NN-slug` e `gh pr create --title "<mensagem do commit>" --body "<resumo e critério de aceite>"`. Parar e aguardar o merge.
 - **Autoria**: todo commit deve ter autor e committer `gustavolovizotto` (`git config user.email gustavolovizotto@gmail.com`). **Proibido** qualquer trailer `Co-Authored-By` ou rodapé "Generated with Claude Code", tanto no commit quanto na descrição do PR. O uso de IA é documentado apenas no README.
-- **Limite da Jikan**: 3 requisições por segundo. Nunca disparar fetch a cada tecla, sempre com debounce de 500 ms.
+- **Limite da AniList**: 30 requisições por minuto. Nunca disparar fetch a cada tecla, sempre com debounce de 500 ms.
 - **Formato do objeto Anime normalizado** (usado em toda a aplicação, produzido só em `services/jikan.js`):
   ```js
   { id, title, titleJp, image, score, rank, members, type, episodes, duration, year, status, synopsis, genres: [string], studios: [string], trailerUrl }

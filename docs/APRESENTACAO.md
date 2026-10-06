@@ -3,17 +3,17 @@
 ## 1. Contexto e API (1 min)
 
 - Problema: acompanhar os animes que quero ver, estou vendo e já vi, com nota pessoal e estatísticas.
-- Solução: SPA em React que consome a **Jikan v4**, API pública e sem chave com os dados do MyAnimeList.
-- Mostrar `src/services/jikan.js`: única camada que fala com a API e devolve o objeto Anime normalizado usado em toda a aplicação. Citar o limite de 3 req/s, o debounce de 500 ms na busca e o retry em caso de 429.
+- Solução: SPA em React que consome a **AniList GraphQL**, API pública e sem chave.
+- Mostrar `src/services/anilist.js`: única camada que fala com a API e devolve o objeto Anime normalizado usado em toda a aplicação. Citar o limite de 30 req/min, o debounce de 500 ms na busca e o retry em caso de 429.
 
 ## 2. Demo do fluxo (2 min)
 
 1. **Explorar**: abre com o Top 20. Trocar os chips (Melhor nota, Mais populares, Em exibição).
 2. **Buscar** "fullmetal": a URL vira `?q=fullmetal`, espera meio segundo e mostra os resultados. Recarregar a página mantém a busca.
-3. **Detalhe**: clicar na capa abre o modal com sinopse, nota MAL, ranking, membros, gêneros e trailer. Recomendações navegam para outro anime dentro do modal. Esc e clique fora fecham.
+3. **Detalhe**: clicar na capa abre o modal com sinopse, nota AniList, ranking, membros, gêneros e trailer. Recomendações navegam para outro anime dentro do modal. Esc e clique fora fecham.
 4. **Avaliar**: salvar com "Assisti" sem nota mostra o erro em vermelho. Com nota, o item entra na lista e o formulário passa para modo edição.
 5. **Minha lista**: abas por status, trocar o status no select move o item de aba, lixeira remove. Recarregar a página mantém tudo (localStorage).
-6. **Estatísticas**: horas assistidas, sua média, você vs. MAL, gêneros favoritos, melhor avaliado e histograma de notas.
+6. **Estatísticas**: horas assistidas, sua média, você vs. AniList, gêneros favoritos, melhor avaliado e histograma de notas.
 
 ## 3. Código: os hooks obrigatórios (1 min)
 
