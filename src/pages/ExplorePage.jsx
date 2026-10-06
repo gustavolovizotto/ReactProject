@@ -9,6 +9,7 @@ import AnimeGrid from '../features/AnimeGrid.jsx'
 import SearchBar from '../features/SearchBar.jsx'
 import useDebounce from '../hooks/useDebounce.js'
 import useFetch from '../hooks/useFetch.js'
+import usePrefixSearch from '../hooks/usePrefixSearch.js'
 import { getTopAnime, searchAnime } from '../services/anilist.js'
 import { useList } from '../state/ListContext.jsx'
 
@@ -43,6 +44,14 @@ function ExplorePage() {
     [searching, q, type, genre, filter],
   )
 
+  // Resultados locais por prefixo aparecem na hora; os da API completam quando chegam.
+  const local = usePrefixSearch(type || genre ? '' : values.q)
+  const remote = data?.items ?? []
+  const items = searching || local.length > 0
+    ? [...local, ...remote.filter((anime) => !local.some((l) => l.id === anime.id))]
+    : remote
+  const showGrid = data || local.length > 0
+
   return (
     <div className="flex flex-col gap-6">
       <SectionHeading
@@ -52,8 +61,8 @@ function ExplorePage() {
       />
       <SearchBar values={values} onChange={onChange} />
       <div className="flex items-center justify-between">
-        <h3 className="font-display text-xl uppercase">{searching ? 'Resultados' : 'Top animes'}</h3>
-        {!searching && (
+        <h3 className="font-display text-xl uppercase">{searching || local.length > 0 ? 'Resultados' : 'Top animes'}</h3>
+        {!searching && local.length === 0 && (
           <div className="flex gap-2">
             {FILTERS.map(({ value, label }) => (
               <Chip key={value} active={filter === value} onClick={() => setFilter(value)}>
@@ -65,8 +74,8 @@ function ExplorePage() {
       </div>
       {loading && <Spinner />}
       {error && <ErrorMessage message={error.message} />}
-      {data && (
-        <AnimeGrid animes={data.items} onAdd={(anime) => add(anime)} onOpen={setSelectedId} isAdded={has} />
+      {showGrid && (
+        <AnimeGrid animes={items} onAdd={(anime) => add(anime)} onOpen={setSelectedId} isAdded={has} />
       )}
       <AnimeDetailModal id={selectedId} onClose={() => setSelectedId(null)} onOpen={setSelectedId} />
     </div>
