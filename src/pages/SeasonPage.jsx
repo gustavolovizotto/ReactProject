@@ -5,7 +5,7 @@ import Spinner from '../components/Spinner.jsx'
 import AnimeDetailModal from '../features/AnimeDetailModal.jsx'
 import AnimeGrid from '../features/AnimeGrid.jsx'
 import useFetch from '../hooks/useFetch.js'
-import { getSeasonNow } from '../services/jikan.js'
+import { getSeasonNow } from '../services/anilist.js'
 import { useList } from '../state/ListContext.jsx'
 
 const DAYS = {

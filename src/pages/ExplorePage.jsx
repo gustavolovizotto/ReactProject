@@ -9,7 +9,7 @@ import AnimeGrid from '../features/AnimeGrid.jsx'
 import SearchBar from '../features/SearchBar.jsx'
 import useDebounce from '../hooks/useDebounce.js'
 import useFetch from '../hooks/useFetch.js'
-import { getTopAnime, searchAnime } from '../services/jikan.js'
+import { getTopAnime, searchAnime } from '../services/anilist.js'
 import { useList } from '../state/ListContext.jsx'
 
 const FILTERS = [
@@ -48,7 +48,7 @@ function ExplorePage() {
       <SectionHeading
         jp="探す"
         title="Explorar"
-        subtitle="Busque no catálogo do MyAnimeList e monte sua lista."
+        subtitle="Busque no catálogo do AniList e monte sua lista."
       />
       <SearchBar values={values} onChange={onChange} />
       <div className="flex items-center justify-between">

@@ -1,4 +1,4 @@
-const LABELS = ['', 'Anime', 'Progresso', 'Sua nota', 'Nota MAL', 'Status', '']
+const LABELS = ['', 'Anime', 'Progresso', 'Sua nota', 'Nota AniList', 'Status', '']
 
 function ListHeaderRow() {
   return (

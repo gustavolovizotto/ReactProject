@@ -2,7 +2,7 @@ import ErrorMessage from '../components/ErrorMessage.jsx'
 import Modal from '../components/Modal.jsx'
 import Spinner from '../components/Spinner.jsx'
 import useFetch from '../hooks/useFetch.js'
-import { getAnime, getRecommendations } from '../services/jikan.js'
+import { getAnime, getRecommendations } from '../services/anilist.js'
 import AnimeDetail from './AnimeDetail.jsx'
 
 function AnimeDetailModal({ id, onClose, onOpen }) {

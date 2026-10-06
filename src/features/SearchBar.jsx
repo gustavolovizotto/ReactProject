@@ -1,6 +1,6 @@
 import Button from '../components/Button.jsx'
 import Field, { inputClass } from '../components/Field.jsx'
-import { GENRES, TYPES } from '../services/jikan.js'
+import { GENRES, TYPES } from '../services/anilist.js'
 
 function SearchBar({ values, onChange }) {
   const set = (field) => (e) => onChange({ ...values, [field]: e.target.value })

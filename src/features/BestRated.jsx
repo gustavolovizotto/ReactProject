@@ -10,7 +10,7 @@ function BestRated({ item }) {
       <div className="flex flex-col gap-2 min-w-0">
         <h4 className="font-display text-base">{anime.title}</h4>
         <p className="text-sm">
-          Sua nota <strong className="text-vermilion">{score}</strong> · MAL {anime.score ?? '–'}
+          Sua nota <strong className="text-vermilion">{score}</strong> · AniList {anime.score ?? '–'}
         </p>
         {comment && <p className="text-sm text-muted italic">“{comment}”</p>}
       </div>
