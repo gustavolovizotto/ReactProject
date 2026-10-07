@@ -74,6 +74,7 @@ const PAGE_QUERY = `
   query ($page: Int, $perPage: Int, $search: String, $format: MediaFormat, $genre: [String],
          $status: MediaStatus, $season: MediaSeason, $seasonYear: Int, $sort: [MediaSort]) {
     Page(page: $page, perPage: $perPage) {
+      pageInfo { currentPage lastPage hasNextPage }
       media(type: ANIME, isAdult: false, search: $search, format: $format, genre_in: $genre,
             status: $status, season: $season, seasonYear: $seasonYear, sort: $sort) {
         ${MEDIA_FIELDS}
@@ -84,7 +85,7 @@ const PAGE_QUERY = `
 
 async function page(variables) {
   const data = await request(PAGE_QUERY, { perPage: 20, ...variables })
-  return { items: data.Page.media.map(normalize) }
+  return { items: data.Page.media.map(normalize), pageInfo: data.Page.pageInfo }
 }
 
 const TOP_FILTERS = {
@@ -93,12 +94,13 @@ const TOP_FILTERS = {
   airing: { status: 'RELEASING', sort: ['POPULARITY_DESC'] },
 }
 
-export function getTopAnime(filter = '') {
-  return page(TOP_FILTERS[filter] ?? TOP_FILTERS[''])
+export function getTopAnime(filter = '', pageNumber = 1) {
+  return page({ page: pageNumber, ...(TOP_FILTERS[filter] ?? TOP_FILTERS['']) })
 }
 
-export function searchAnime({ q, type, genre }) {
+export function searchAnime({ q, type, genre, page: pageNumber = 1 }) {
   return page({
+    page: pageNumber,
     search: q || undefined,
     format: type || undefined,
     genre: genre ? [genre] : undefined,

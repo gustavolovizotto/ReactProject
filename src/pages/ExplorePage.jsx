@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Chip from '../components/Chip.jsx'
+import Button from '../components/Button.jsx'
 import ErrorMessage from '../components/ErrorMessage.jsx'
+import Pagination from '../components/Pagination.jsx'
 import SectionHeading from '../components/SectionHeading.jsx'
 import Spinner from '../components/Spinner.jsx'
 import AnimeDetailModal from '../features/AnimeDetailModal.jsx'
@@ -29,9 +31,16 @@ function ExplorePage() {
     type: params.get('type') ?? '',
     genre: params.get('genre') ?? '',
   }
+  const page = Math.max(1, Number(params.get('page')) || 1)
+  // Mudar a busca volta para a página 1; mudar a página mantém a busca.
   const onChange = (next) => {
     const entries = Object.entries(next).filter(([, v]) => v)
     setParams(Object.fromEntries(entries), { replace: true })
+  }
+  const setPage = (n) => {
+    const entries = Object.entries({ ...values, page: n > 1 ? String(n) : '' }).filter(([, v]) => v)
+    setParams(Object.fromEntries(entries))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const debouncedQ = useDebounce(values.q)
@@ -39,14 +48,29 @@ function ExplorePage() {
   const { type, genre } = values
   const searching = Boolean(q || type || genre)
 
-  const { data, loading, error } = useFetch(
-    () => (searching ? searchAnime({ q, type, genre }) : getTopAnime(filter)),
-    [searching, q, type, genre, filter],
-  )
+  const fetchPage = (n) => (searching ? searchAnime({ q, type, genre, page: n }) : getTopAnime(filter, n))
+  const { data, loading, error } = useFetch(() => fetchPage(page), [searching, q, type, genre, filter, page])
+
+  // "Ver mais" acumula páginas seguintes abaixo da atual, sem trocar a URL.
+  // O acumulado é descartado quando a busca ou a página mudam (a chave deixa de bater).
+  const key = JSON.stringify([searching, q, type, genre, filter, page])
+  const [moreState, setMoreState] = useState({ key, items: [], next: null, loading: false })
+  const more = moreState.key === key ? moreState : { key, items: [], next: null, loading: false }
+  const lastLoaded = more.next ?? data?.pageInfo
+  const loadMore = async () => {
+    setMoreState({ ...more, loading: true })
+    const result = await fetchPage(lastLoaded.currentPage + 1).catch(() => null)
+    setMoreState({
+      key,
+      items: result ? [...more.items, ...result.items] : more.items,
+      next: result?.pageInfo ?? more.next,
+      loading: false,
+    })
+  }
 
   // Resultados locais por prefixo aparecem na hora; os da API completam quando chegam.
   const local = usePrefixSearch(type || genre ? '' : values.q)
-  const remote = data?.items ?? []
+  const remote = [...(data?.items ?? []), ...more.items]
   const items = searching || local.length > 0
     ? [...local, ...remote.filter((anime) => !local.some((l) => l.id === anime.id))]
     : remote
@@ -76,6 +100,16 @@ function ExplorePage() {
       {error && <ErrorMessage message={error.message} />}
       {showGrid && (
         <AnimeGrid animes={items} onAdd={(anime) => add(anime)} onOpen={setSelectedId} isAdded={has} />
+      )}
+      {data && lastLoaded?.hasNextPage && (
+        <div className="flex justify-center">
+          <Button variant="outline" onClick={loadMore} disabled={more.loading}>
+            {more.loading ? 'Carregando…' : 'Ver mais'}
+          </Button>
+        </div>
+      )}
+      {data && (page > 1 || data.pageInfo.hasNextPage) && (
+        <Pagination page={page} lastPage={data.pageInfo.lastPage} onChange={setPage} />
       )}
       <AnimeDetailModal id={selectedId} onClose={() => setSelectedId(null)} onOpen={setSelectedId} />
     </div>
